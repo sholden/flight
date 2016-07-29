@@ -34,12 +34,9 @@ def get_arrival_paths(flights, depart, land, depart_at, path = [])
   departures = flights.select{|f| f.depart == depart && f.depart_at >= depart_at}
   arrivals, connections = departures.partition{|f| land == f.land}
 
-  arrival_paths = arrivals.map{|f| path + [f]}
-  arrival_paths += connections.flat_map do |f|
+  arrivals.map{|f| path + [f]} + connections.flat_map do |f|
     get_arrival_paths(flights, f.land, land, f.land_at, path + [f])
   end
-
-  arrival_paths
 end
 
 def get_best_path(flights, depart, land, depart_at)
